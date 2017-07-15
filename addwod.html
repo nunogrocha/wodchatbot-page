@@ -62,7 +62,7 @@
           <!-- Navigation -->
           <div class="android-navigation-container">
             <nav class="android-navigation mdl-navigation">
-              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="addwod.html">ADD YOUR WOD</a>
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.html">ADD YOUR WOD</a>
               <a class="mdl-navigation__link mdl-typography--text-uppercase inline-img-btn-container" href="https://www.facebook.com/messages/t/wod.chatbot" target="_blank" role="button">
                 <img src="images/ic_fbmessenger_white.svg" /><span class="inline-img-btn">OPEN ON MESSENGER</span>
               </a>
@@ -83,58 +83,43 @@
         </nav>
       </div>
 
-      <div class="android-content mdl-layout__content white-bg">
-        <div class="android-more-section">
-          <h3>Privacy Policy</h3>
+      <div class="android-content mdl-layout__content">
+        <div class="hero-container">
+					<div class="hero" style="flex-direction: column;">
 
-					<p>Last updated: July 08, 2017</p>
+						<h4 class="display-1 android-link">
+							Send us your own WOD submission and we'll notify you by email when it's published and available through our bot.
+						</h4>
 
-					<p>THE WOD CHATBOT ("us", "we", or "our") operates the www.thewodchatbot.com website.</p>
+            <form>
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<input class="mdl-textfield__input" type="text" name="WODName" id="WODName">
+								<label class="mdl-textfield__label" for="WODName">Title</label>
+							</div>
 
-					<p>This page informs you of our policies regarding the collection, use and disclosure of Personal Information when you use our Service.</p>
+							<div class="mdl-textfield mdl-js-textfield">
+								<textarea class="mdl-textfield__input" type="text" rows= "7" name="WODBody" id="WODBody" ></textarea>
+								<label class="mdl-textfield__label" for="WODBody">WOD</label>
+							</div>
 
-					<p>We will not use or share your information with anyone except as described in this Privacy Policy.</p>
+							<div class="mdl-textfield mdl-js-textfield">
+								<textarea class="mdl-textfield__input" type="text" rows= "2" name="WODNotes" id="WODNotes" ></textarea>
+								<label class="mdl-textfield__label" for="WODNotes">Notes</label>
+							</div>
 
-					<p>We use your Personal Information for providing and improving the Service. By using the Service, you agree to the collection and use of information in accordance with this policy.</p>
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<input class="mdl-textfield__input" type="text" name="email" id="email">
+								<label class="mdl-textfield__label" for="email">Email</label>
+								<small>You can leave it blank, but you won't be notified when your wod goes live.</small>
+							</div>
 
-					<h3>Information Collection And Use</h3>
+							<div id="submitForm" class="mdl-button mdl-js-button mdl-button--primary">
+								Submit WOD
+							</div>
+						</form>
+					</div>
+        </div>
 
-					<p>While using our Service, we will never ask you to provide us with certain personally identifiable information that can be used to contact or identify you directly. When you use our service, as part of the process, we collect the already publicly available personal information you give us, such as your name and Messenger User ID.</p>
-
-					<p>We may disclose your personal information if we are required by law to do so.</p>
-
-					<h3>Log Data</h3>
-
-					<p>We collect information that your usage sends whenever you use our Service. This Log Data may include information such as your most used features, the time and date of your visit, the time spent on each feature and other analytics and statistics.</p>
-
-					<h3>Service Providers</h3>
-
-					<p>We may employ third party companies and individuals to facilitate our Service, to provide the Service on our behalf, to perform Service-related services or to assist us in analyzing how our Service is used.</p>
-
-					<p>These third parties have access to your Personal Information only to perform these tasks on our behalf and are obligated not to disclose or use it for any other purpose.</p>
-
-					<h3>Security</h3>
-
-					<p>The security of your Personal Information is important to us, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Information, we cannot guarantee its absolute security.</p>
-
-					<h3>Children's Privacy</h3>
-
-					<p>Our Service does not address anyone under the age of 13 ("Children").</p>
-
-					<p>We do not knowingly collect personally identifiable information from children under 13. If you are a parent or guardian and you are aware that your Children has provided us with Personal Information, please contact us. If we discover that a Children under 13 has provided us with Personal Information, we will delete such information from our servers immediately.</p>
-
-					<h3>Changes To This Privacy Policy</h3>
-
-					<p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
-
-					<p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>
-
-					<h3>Contact Us</h3>
-
-					<p>If you have any questions about this Privacy Policy, please contact us.</p>                 
-                                                                
-				</div>
-    
         <footer class="android-footer mdl-mega-footer">
           <div class="mdl-mega-footer--top-section">
             <a class="mdl-mega-footer--left-section" target="_blank" href="https://www.facebook.com/wod.chatbot/">
@@ -157,5 +142,45 @@
       </div>
     </div>
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+		<script
+			src="https://code.jquery.com/jquery-3.2.1.min.js"
+			integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+			crossorigin="anonymous"></script>
+		<script>
+			function validateForm() {
+				if ( $("#WODName").val() && $("#WODBody").val() ) {
+					return true;
+				}
+				return false;
+			}
+
+			$(document).ready(function () {
+				$("#submitForm").click(function () {
+					if (validateForm()) {
+						$("#submitForm").text("Sending ...");
+						$.post(
+							"http://cf-bot-api.herokuapp.com/api/webform",
+							{
+								name: $("#WODName").val(),
+								wod: $("#WODBody").val(),
+								notes: $("#WODNotes").val() ? $("#WODNotes").val() : null,
+								email: $("#email").val() ? $("#email").val() : null
+							}, 
+							function() {
+								$("#submitForm").text("Success! WOD Sent!").removeClass("mdl-button--accent").removeClass("mdl-button--primary").addClass("mdl-button--success")
+								return true;
+							}
+						)
+						.fail(function() {
+							$("#submitForm").text("Error! Something went wrong, try again!").removeClass("mdl-button--primary").addClass("mdl-button--accent");
+							return false;
+						})
+					} else {
+						$("#submitForm").text("Error! Title and WOD are required!").removeClass("mdl-button--primary").addClass("mdl-button--accent");
+						return false;
+					}
+				})
+			});
+		</script>
   </body>
 </html>
